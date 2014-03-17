@@ -1,0 +1,9 @@
+in python:
+- pandas have HDFStore methods
+- pandas is a data manipulation lib for python
+
+http://pandas.pydata.org/pandas-docs/dev/cookbook.html#cookbook-hdf
+
+
+- http://www.pytables.org/moin
+- usage: see http://reganmian.net/blog/2014/03/10/parsing-massive-clicklogs/

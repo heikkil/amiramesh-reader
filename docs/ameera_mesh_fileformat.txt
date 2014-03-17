@@ -1,0 +1,59 @@
+Spatial Graph
+The data type Spatial Graph is used to store data organized in three dimensional networks. Points, Nodes, and Segments are the three basic structural components used in this module. The Nodes are the branching points and endpoints of the network, and the Segments are the lines connecting the nodes. Segments, in turn, consist of Points describing the three-dimensional course of a segment. Each Point is identified by spatial coordinates. A set of Segments connected by Nodes will be termed a Graph and a Spatial Graph data object can store even several Graphs. One or more scalar data items can be optionally stored for each network item, while labels can be associated only with Nodes and Segments. 
+In order to store Spatial Graph sets in an Avizo file, three 1D arrays have to be defined, namely EDGES, used to store the Segments indices, VERTEX, used to store the Nodes coordinates, and POINT, for the Points. Scalar values can be attached to Segments, Nodes and Points, while labels and label groups only to Segments and Nodes. Multiple values should be distinguished by denoting them Data2, Data3, and so on. Here is an example with 5 Nodes, 4 Segments and 242 Points, with one label (LabelGroup0) associated to the Segments and one scalar (Data0) to the Points: 
+    # Avizo 3D ASCII 2.0
+    
+    define VERTEX 5
+    define EDGE 4
+    define POINT 24
+    
+    Parameters {
+      LabelGroup0 { Id 0, Color 0.8 0.16 0.16 }
+      ContentType "HxSpatialGraph"
+    }
+    
+    VERTEX { float[3] VertexCoordinates } @1
+    EDGE { int[2] EdgeConnectivity } @2
+    EDGE { int NumEdgePoints } @3
+    EDGE { int LabelGroup0 } @4
+    POINT { float[3] EdgePointCoordinates } @5
+    POINT { float Data0 } @6
+    
+    # Data section
+    @1 # Coordinates Nodes
+    0 0 0  
+    1 1 1
+    1 0 0
+    0 0 1
+    0 1 0
+    
+    @2 # To which Nodes the Segments belong
+    0 1 
+    2 1 
+    1 3 
+    3 4 
+    
+    @3 # Number of Points belonging to Edges
+    9
+    6
+    5
+    4 
+    
+    @4 # Label of the Edges
+    0
+    0
+    0
+    0
+    
+    @5 # Coordinates Points
+    0 0 0
+    0.2 0.2 0.2
+    ...
+    
+    @6 # Scalar associated Points
+    1
+    2
+    ...
+    
+Once the Nodes are defined, the Segments follow using Nodes indices as shown above. For each Segment the number of included Points and their coordinates should be specified. The index of the first item is 0. An index value of -1 indicates that a item should be terminated. 
+
