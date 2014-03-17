@@ -44,6 +44,9 @@ class Point3D(object):
     def list(self):
         """ Returns a list of XYX values"""
         return [self.x, self.y, self.z]
+#
+# Node class
+#
 
 class Node(Point3D):
     """Graph node point class in 3D space """
@@ -53,24 +56,37 @@ class Node(Point3D):
         self.y = y
         self.z = z
 
+#
+# Segment class
+#
         
 class Segment(object):
     """List of points """
  
-    def __init__(self, start, end, count, points, diameter):
+    def __init__(self, start, end):
         self.start = start
         self.end = end
-        self.count = count
-        self.points = points
-        self.diameter = diameter
+        self.count = None
+        self.points = None
+        self.diameters = None
                         
+#
+# Skeleton class
+#
+
 class Skeleton(object):
     """nodes, segments, and their locations """
  
-    def __init__(self, x=0, y=0, z=0):
-        self.x = x
-        self.y = y
+    def __init__(self):
+        self.nodes = {}
+        self.segments = []
 
+    def add_node(self, name, node):
+        self.nodes.setdefault(name, node)
+
+    def add_segment(self, segment):
+        self.segments.append(segment)
+        
 
 #
 # main
@@ -80,13 +96,16 @@ class Skeleton(object):
 nodes = []
 
 #print "Hello"
-counter = 0
+counter = 0                     # sections
+linecounter = 0                 # within sections
 
 try:
     f = open(myfile)
 except (TypeError, IOError):
     print "File not given or does not exist: ", myfile
     exit(1)
+
+skel = Skeleton()                 # storage object
     
 for line in f:
     # trim white space, including \r,\n
@@ -102,17 +121,29 @@ for line in f:
     # header
     if header:
         counter+= 1
+        linecounter = 0
         continue
 
     if counter == 1:
         match = re.search('([\d\.e\+\-]+) ([\d\.e\+\-]+) ([\d\.e\+\-]+)', line)
         x,y,z = match.groups()
-        p = Point3D(x,y,z)
-        nodes.append(p)
+        n = Node(x,y,z)
+        skel.add_node("0",n)
+        linecounter += 1
+
+    elif counter == 2:
+        match = re.search('(\d+) (\d+)', line)
+        start,end = match.groups()
+        seg = Segment(start, end)
+        #print type(skel), type(skel.add_segment)
+        skel.add_segment(seg)
+        
+    #elif counter == 3:
+        
         
     print(line)
     
 
 
-pprint(nodes)
-pprint(nodes[0].__dict__)
+#pprint(nodes)
+pprint(skel.__dict__)
