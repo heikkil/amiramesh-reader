@@ -33,22 +33,11 @@ if myfile == None:
 # 3D point class
 #
 
-class Point3D(object):
-    """3D Point class with public x,y,z attributes """
- 
-    def __init__(self, x=0, y=0, z=0):
-        self.x = x
-        self.y = y
-        self.z = z
-    
-    def list(self):
-        """ Returns a list of XYX values"""
-        return [self.x, self.y, self.z]
 #
 # Node class
 #
 
-class Node(Point3D):
+class Node(object):
     """Graph node point class in 3D space """
  
     def __init__(self, x=0, y=0, z=0):
@@ -56,6 +45,26 @@ class Node(Point3D):
         self.y = y
         self.z = z
 
+
+class Point3D(Node):
+    """3D Point class with public x,y,z attributes and optional set of diameters
+    """
+ 
+    def __init__(self, x=0, y=0, z=0):
+        self.x = x
+        self.y = y
+        self.z = z
+
+        self.diameters = []
+        
+    def list(self):
+        """ Returns a list of XYX values"""
+        return [self.x, self.y, self.z]
+
+    def add_diameter(self, dia):
+        self.diameters.append(dia)
+
+        
 #
 # Segment class
 #
@@ -66,10 +75,13 @@ class Segment(object):
     def __init__(self, start, end):
         self.start = start
         self.end = end
-        self.count = None
-        self.points = None
-        self.diameters = None
-                        
+
+        self.pointcount = None
+        self.points = []
+
+    def __len__(self):
+        self.pointcount
+
 #
 # Skeleton class
 #
@@ -85,18 +97,36 @@ class Skeleton(object):
         self.nodes.setdefault(name, node)
 
     def add_segment(self, segment):
+        #self.nodes.setdefault(name, node)
         self.segments.append(segment)
         
+    def add_points(self, points):
+        c = 0
+        point_count = 0
+        seg_count = self.segments[c].pointcount
+        for point in points:
+            point_count += 1;
+            s = self.segments[c]
+            if point_count == seg_count:
+                c =+ 1
+                seg_count += self.segments[c].pointcount
+            self.segments[c].points.append(point)
 
+    def info(self):
+        print "Nodes    : " + str(len(self.nodes))
+        print "Segments : " + str(len(self.segments))
+        c = 0
+        for s in self.segments:
+             c+= len(s.points)
+        print "Points   : " + str(c)
+            
 #
 # main
 #
 
 
-nodes = []
-
-#print "Hello"
-counter = 0                     # sections
+points = []                     # list of points
+counter = 0                     # section counter
 linecounter = 0                 # within sections
 
 try:
@@ -110,6 +140,7 @@ skel = Skeleton()                 # storage object
 for line in f:
     # trim white space, including \r,\n
     line = line.strip()
+
     # ignore empty lines
     if not line:
         continue
@@ -118,32 +149,65 @@ for line in f:
     header = re.search('^@', line)
     if counter == 0 and not header:
         continue
+
     # header
     if header:
         counter+= 1
         linecounter = 0
         continue
 
-    if counter == 1:
+    if counter == 1:            # nodes
         match = re.search('([\d\.e\+\-]+) ([\d\.e\+\-]+) ([\d\.e\+\-]+)', line)
         x,y,z = match.groups()
         n = Node(x,y,z)
-        skel.add_node("0",n)
+        skel.add_node(linecounter,n)
         linecounter += 1
 
-    elif counter == 2:
+    elif counter == 2:          # segments to nodes
         match = re.search('(\d+) (\d+)', line)
         start,end = match.groups()
         seg = Segment(start, end)
         #print type(skel), type(skel.add_segment)
         skel.add_segment(seg)
         
-    #elif counter == 3:
-        
-        
-    print(line)
-    
+    elif counter == 3:          # point count within segment
+        match = re.search('(\d+)', line)
+        count = match.groups()
+        skel.segments[linecounter].pointcount = count
+        linecounter += 1
 
+    elif counter == 4:          # point coordinates within a segment
+        match = re.search('([\d\.e\+\-]+) ([\d\.e\+\-]+) ([\d\.e\+\-]+)', line)
+        x,y,z = match.groups()
+        p = Point3D(x,y,z)
+        #skel.add_point(linecounter, p)
+        points.append(p)
+        #linecounter += 1
 
-#pprint(nodes)
-pprint(skel.__dict__)
+    elif counter > 4:           # one or more diameters
+        # empty values replaced by 0
+        if line == 'nan':
+            line = '0';
+        match = re.search('([\d\.e\+\-]+)', line)
+
+        dia = match.groups()
+        points[linecounter].add_diameter(dia)
+        linecounter += 1
+
+    #print line
+        
+# add points in the end for efficiency
+skel.add_points(points)
+
+if verbose:
+    skel.info()
+
+#
+# end of main
+#
+
+# debugging
+
+#pprint(skel.__dict__)
+#pprint(skel.segments[0].__dict__)
+#pprint(points[0].__dict__)
