@@ -3,9 +3,6 @@ import argparse
 import re
 from pprint import pprint
 
-#
-# 3D point class
-#
 
 #
 # Node class
@@ -19,6 +16,9 @@ class Node(object):
         self.y = y
         self.z = z
 
+#
+# 3D point class
+#
 
 class Point3D(Node):
     """3D Point class with public x,y,z attributes and optional set of diameters """
@@ -94,6 +94,9 @@ class Skeleton(object):
              c+= len(s.points)
         print "Points   : " + str(c)
 
+#
+# AmirameshReader class
+#
 
 class AmirameshReader(object):
     """ Read from a filehandle, parse, return a Skeleton object"""
