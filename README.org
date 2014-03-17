@@ -1,0 +1,12 @@
+* AmiraMesh 3D ASCII 2.0 parser
+
+This repository has code and test files for AmiraMesh 3D ASCII 2.0
+format for passing on branching and thickness information from
+reconstructed biological cells.
+
+** Runtime
+
+The code is tested in Python 2.7.6.
+
+=bin/read_ameramesh.py -v= on sample datafiles should print out
+the same numbers that are given in the datafile header.
