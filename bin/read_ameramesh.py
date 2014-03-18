@@ -10,7 +10,7 @@ from pprint import pprint
 
 class Node(object):
     """Graph node point class in 3D space """
- 
+
     def __init__(self, x=0, y=0, z=0):
         self.x = x
         self.y = y
@@ -22,14 +22,14 @@ class Node(object):
 
 class Point3D(Node):
     """3D Point class with public x,y,z attributes and optional set of diameters """
- 
+
     def __init__(self, x=0, y=0, z=0):
         self.x = x
         self.y = y
         self.z = z
 
         self.diameters = []
-        
+
     def list(self):
         """ Returns a list of XYX values"""
         return [self.x, self.y, self.z]
@@ -37,14 +37,14 @@ class Point3D(Node):
     def add_diameter(self, dia):
         self.diameters.append(dia)
 
-        
+
 #
 # Segment class
 #
-        
+
 class Segment(object):
     """List of points """
- 
+
     def __init__(self, start, end):
         self.start = start
         self.end = end
@@ -62,7 +62,7 @@ class Segment(object):
 class Skeleton(object):
     """Top storage object for a skeleton that knows about
     nodes, segments, and their locations """
- 
+
     def __init__(self):
         self.nodes = {}
         self.segments = []
@@ -73,7 +73,7 @@ class Skeleton(object):
     def add_segment(self, segment):
         #self.nodes.setdefault(name, node)
         self.segments.append(segment)
-        
+
     def add_points(self, points):
         c = 0
         point_count = 0
@@ -130,6 +130,9 @@ class AmirameshReader(object):
             if counter == 1:            # nodes
                 match = re.search('([\d\.e\+\-]+) ([\d\.e\+\-]+) ([\d\.e\+\-]+)', line)
                 x,y,z = match.groups()
+                x = float(x)
+                y = float(y)
+                z = float(z)
                 n = Node(x,y,z)
                 skel.add_node(linecounter,n)
                 linecounter += 1
@@ -140,7 +143,7 @@ class AmirameshReader(object):
                 seg = Segment(start, end)
                 #print type(skel), type(skel.add_segment)
                 skel.add_segment(seg)
-        
+
             elif counter == 3:          # point count within segment
                 match = re.search('(\d+)', line)
                 count = match.groups()
@@ -150,6 +153,9 @@ class AmirameshReader(object):
             elif counter == 4:          # point coordinates within a segment
                 match = re.search('([\d\.e\+\-]+) ([\d\.e\+\-]+) ([\d\.e\+\-]+)', line)
                 x,y,z = match.groups()
+                x = float(x)
+                y = float(y)
+                z = float(z)
                 p = Point3D(x,y,z)
                 #skel.add_point(linecounter, p)
                 points.append(p)
@@ -157,14 +163,15 @@ class AmirameshReader(object):
 
             elif counter > 4:           # one or more diameters
                 # empty values replaced by 0
-                if line == 'nan':
-                    line = '0'
+                if line == "nan":
+                    line = "0.0"
 
                 match = re.search('([\d\.e\+\-]+)', line)
-                dia = match.groups()
+                dia = match.groups()[0]
+                dia = float(dia)
                 points[linecounter].add_diameter(dia)
                 linecounter += 1
-                
+
         # add points in the end for efficiency
         skel.add_points(points)
         return skel
