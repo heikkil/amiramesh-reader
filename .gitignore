@@ -4,3 +4,4 @@ example*
 *egg-info
 build
 dist
+.coverage

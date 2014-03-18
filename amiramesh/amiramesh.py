@@ -52,7 +52,7 @@ class Segment(object):
         self.points = []
 
     def __len__(self):
-        self.pointcount
+        return(self.pointcount)
 
 #
 # Skeleton class
@@ -80,7 +80,7 @@ class Skeleton(object):
         for point in points:
             point_count += 1;
             s = self.segments[c]
-            if point_count == seg_count:
+            if point_count > seg_count:
                 c =+ 1
                 seg_count += self.segments[c].pointcount
             self.segments[c].points.append(point)
@@ -146,7 +146,7 @@ class AmirameshReader(object):
             elif counter == 3:          # point count within segment
                 match = re.search('(\d+)', line)
                 count = match.groups()
-                skel.segments[linecounter].pointcount = count
+                skel.segments[linecounter].pointcount = int(count[0])
                 linecounter += 1
 
             elif counter == 4:          # point coordinates within a segment
