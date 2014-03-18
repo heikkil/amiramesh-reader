@@ -1,2 +1,6 @@
 example*
 .#*
+*.pyc
+*egg-info
+build
+dist
