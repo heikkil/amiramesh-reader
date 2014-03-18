@@ -11,7 +11,7 @@ config = {
     'version': '0.1',
     'install_requires': ['nose'],
     'data_files': ['data/lariat.am'],
-    'packages': ['amiramesh'],
+    'packages': ['lib'],
     'scripts': ['bin/read_amiramesh.py'],
     'name': 'amiramesh'
 }

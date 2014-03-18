@@ -1,6 +1,6 @@
 from nose.tools import *
 
-from amiramesh.amiramesh import *
+from amiramesh import *
 
 n = Node(1,2,3);
 p = Point3D(1,2,3);
