@@ -55,9 +55,9 @@ the same numbers that are given in the datafile header.
         add_diameter()
       }
 
-      Skeleton <-r- Node
-      Skeleton <- Segment
-      Segment <-- Point
+      Skeleton *-- "*" Node
+      Skeleton *-- "*" Segment
+      Segment  *-- "*" Point
 
     }
 
