@@ -10,3 +10,59 @@ The code is tested in Python 2.7.6.
 
 =bin/read_ameramesh.py -v= on sample datafiles should print out
 the same numbers that are given in the datafile header.
+
+* Code structure
+
+  A 3D *skeleton* structure in *amiramesh* consists of *nodes* in a graph
+  and *segments* that join them. *Points* along the segments are given to
+  show the path of the segment. Each point also knows about
+  approximate diameter or two at the position.
+
+  # syntax: http://plantuml.sourceforge.net/classes.html
+  #+BEGIN_SRC plantuml :file docs/class.png :exports results
+      hide empty members
+
+    package amiramesh {
+
+      class Skeleton {
+        dict nodes
+        array segments
+        add_node()
+        add_segment()
+        add_points()
+      }
+
+      class Node {
+        float x
+        float y
+        float z
+      }
+
+      class Segment {
+        string start
+        string end
+        int pointcount
+        array points
+        len()
+      }
+
+      class Point {
+        float x
+        float y
+        float z
+        array diameters
+        list()
+        add_diameter()
+      }
+
+      Skeleton <-r- Node
+      Skeleton <- Segment
+      Segment <-- Point
+
+    }
+
+  #+END_SRC
+
+  #+RESULTS:
+  [[file:docs/class.png]]
+

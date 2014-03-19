@@ -20,7 +20,8 @@ class Node(object):
 #
 
 class Point3D(Node):
-    """3D Point class with public x,y,z attributes and optional set of diameters """
+    """3D Point class with public x,y,z attributes and an optional array
+    of diameters"""
 
     def __init__(self, x=0, y=0, z=0):
         self.x = x
@@ -34,6 +35,7 @@ class Point3D(Node):
         return [self.x, self.y, self.z]
 
     def add_diameter(self, dia):
+        """ Add one float diameter value"""
         self.diameters.append(dia)
 
 
@@ -42,7 +44,12 @@ class Point3D(Node):
 #
 
 class Segment(object):
-    """List of points """
+    """Array of Point objects together with start and end node names
+
+    Length of a segment is the count of points. End points of a
+    segment are at the same location as the end nodes.
+
+    """
 
     def __init__(self, start, end):
         self.start = start
@@ -52,6 +59,7 @@ class Segment(object):
         self.points = []
 
     def __len__(self):
+        """ Count of points"""
         return(self.pointcount)
 
 #
@@ -67,13 +75,25 @@ class Skeleton(object):
         self.segments = []
 
     def add_node(self, name, node):
+        """Add one Node object to a dictionary
+
+        The name is the key to the dictionary of nodes.
+        """
         self.nodes.setdefault(name, node)
 
     def add_segment(self, segment):
-        #self.nodes.setdefault(name, node)
+        """ Add one Segment object to an array"""
         self.segments.append(segment)
 
     def add_points(self, points):
+        """Add an array of Point objects
+
+        The skeleton needs to be populated with its segments before
+        calling this method. Segments need to have the point count
+        (Segment.pointcount) for this method to pass the points to
+        their correct segments.
+        """
+
         c = 0
         point_count = 0
         seg_count = self.segments[c].pointcount
@@ -86,6 +106,7 @@ class Skeleton(object):
             self.segments[c].points.append(point)
 
     def info(self):
+        """Print out the count of Node, Segment and Points objects"""
         print "Nodes    : " + str(len(self.nodes))
         print "Segments : " + str(len(self.segments))
         c = 0
