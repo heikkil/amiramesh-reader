@@ -66,3 +66,10 @@ the same numbers that are given in the datafile header.
   #+RESULTS:
   [[file:docs/class.png]]
 
+* Testing
+
+  Testing was done with ~nose~ and ~coverage~ to 100% coverage:
+
+  #+BEGIN_SRC sh
+    nosetests --with-coverage --cover-package amiramesh
+  #+END_SRC
