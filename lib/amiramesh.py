@@ -107,12 +107,10 @@ class Skeleton(object):
 
     def info(self):
         """Print out the count of Node, Segment and Points objects"""
-        print "Nodes    : " + str(len(self.nodes))
-        print "Segments : " + str(len(self.segments))
         c = 0
         for s in self.segments:
              c+= len(s.points)
-        print "Points   : " + str(c)
+        return "Nodes    : %5i\nSegments : %5i\nPoints   : %5i" % (len(self.nodes), len(self.segments), c)
 
 #
 # AmirameshReader class
@@ -137,7 +135,7 @@ class AmirameshReader(object):
                 continue
 
             # skip intro
-            header = re.search('^@', line)
+            header = line.startswith("@")
             if counter == 0 and not header:
                 continue
 

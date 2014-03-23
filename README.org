@@ -4,13 +4,6 @@ This repository has code and test files for AmiraMesh 3D ASCII 2.0
 format for passing on branching and thickness information from
 reconstructed biological cells.
 
-** Runtime
-
-The code is tested in Python 2.7.6.
-
-=bin/read_ameramesh.py -v= on sample datafiles should print out
-the same numbers that are given in the datafile header.
-
 * Code structure
 
   A 3D *skeleton* structure in *amiramesh* consists of *nodes* in a graph
@@ -67,6 +60,12 @@ the same numbers that are given in the datafile header.
   [[file:docs/class.png]]
 
 * Testing
+
+
+   The code has been tested in Python 2.7.6.
+
+   =bin/read_ameramesh.py -v= on sample datafiles should print out
+   the same numbers that are given in the datafile header.
 
   Testing was done with ~nose~ and ~coverage~ to 100% coverage:
 

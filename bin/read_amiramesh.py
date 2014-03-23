@@ -39,7 +39,7 @@ reader = AmirameshReader()
 skel = reader.parse(f)
 
 if verbose:
-    skel.info()
+    print skel.info()
 
 #
 # end of main
