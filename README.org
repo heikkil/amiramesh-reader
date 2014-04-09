@@ -17,6 +17,11 @@ reconstructed biological cells.
 
     package amiramesh {
 
+
+      class AmiraMeshReader {
+        parse()
+      }
+
       class Skeleton {
         dict nodes
         array segments
@@ -48,9 +53,10 @@ reconstructed biological cells.
         add_diameter()
       }
 
+      AmiraMeshReader --> Skeleton : create
       Skeleton *-- "*" Node
       Skeleton *-- "*" Segment
-      Segment  *-- "*" Point
+      Segment  -r--* "*" Point
 
     }
 
